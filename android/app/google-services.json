@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "319391811518",
+    "project_id": "voice-chat-7f92c",
+    "storage_bucket": "voice-chat-7f92c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319391811518:android:d75bd9ed3f3c8f7613dbef",
+        "android_client_info": {
+          "package_name": "com.example.flutter_procrew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319391811518-v2sc8pq1ufukjchqptvh1lge9qlfcq01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_procrew",
+            "certificate_hash": "b43451d9cc33b233dc9f6744d074247026a90f44"
+          }
+        },
+        {
+          "client_id": "319391811518-b1cuvc387p2ef3s3ocsgvmjstmash01o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgKfXQ4J49eoOCyB9VKUSzS0-_fgaTOwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319391811518-b1cuvc387p2ef3s3ocsgvmjstmash01o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

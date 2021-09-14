@@ -1,0 +1,199 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_procrew/business_logic/login_cubit/login_cubit.dart';
+import 'package:flutter_procrew/utils/app_routes_name.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:formz/formz.dart';
+
+class LoginForm extends StatelessWidget {
+  const LoginForm({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Authentication failure'),
+              ),
+            );
+        }
+        if (state.status.isSubmissionSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Authentication Success'),
+              ),
+            );
+          Navigator.pushReplacementNamed(context, AppRoutesName.HOME_SCREEN);
+        }
+      },
+      child: Align(
+        alignment: const Alignment(0, -1 / 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Image.asset(
+            //   'assets/bloc_logo_small.png',
+            //   height: 120,
+            // ),
+            const SizedBox(height: 16.0),
+            const _EmailInput(),
+            const SizedBox(height: 8.0),
+            const _PasswordInput(),
+            const SizedBox(height: 8.0),
+            const _LoginButton(),
+            const SizedBox(height: 8.0),
+            const _GoogleLoginButton(),
+            const _FacebookLoginButton(),
+            const SizedBox(height: 4.0),
+            _SignUpButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmailInput extends StatelessWidget {
+  const _EmailInput({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.email != current.email,
+      builder: (context, state) {
+        return TextField(
+          key: const Key('loginForm_emailInput_textField'),
+          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            labelText: 'email',
+            helperText: '',
+            errorText: state.email.invalid ? 'invalid email' : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PasswordInput extends StatelessWidget {
+  const _PasswordInput({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.password != current.password,
+      builder: (context, state) {
+        return TextField(
+          key: const Key('loginForm_passwordInput_textField'),
+          onChanged: (password) =>
+              context.read<LoginCubit>().passwordChanged(password),
+          obscureText: true,
+          decoration: InputDecoration(
+            labelText: 'password',
+            helperText: '',
+            errorText: state.password.invalid ? 'invalid password' : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  const _LoginButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                onPressed: state.status.isValidated
+                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    : null,
+                key: const Key('loginForm_continue_raisedButton'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  primary: const Color(0xFFFFD600),
+                ),
+                child: const Text('LOGIN'),
+              );
+      },
+    );
+  }
+}
+
+class _GoogleLoginButton extends StatelessWidget {
+  const _GoogleLoginButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ElevatedButton.icon(
+      key: const Key('loginForm_googleLogin_raisedButton'),
+      onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
+      icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
+      label: const Text(
+        'SIGN IN WITH GOOGLE',
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        primary: theme.accentColor,
+      ),
+    );
+  }
+}
+
+class _FacebookLoginButton extends StatelessWidget {
+  const _FacebookLoginButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ElevatedButton.icon(
+      key: const Key('loginForm_facebookLogin_raisedButton'),
+      onPressed: () => context.read<LoginCubit>().logInWithFacebook(),
+      icon: const Icon(FontAwesomeIcons.facebook, color: Colors.white),
+      label: const Text(
+        'SIGN IN WITH FACEBOOK',
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        primary: theme.accentColor,
+      ),
+    );
+  }
+}
+
+class _SignUpButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return TextButton(
+      key: const Key('loginForm_createAccount_flatButton'),
+      onPressed: () =>
+          Navigator.pushNamed(context, AppRoutesName.SIGNUP_SCREEN),
+      child: Text(
+        'CREATE ACCOUNT',
+        style: TextStyle(color: theme.primaryColor),
+      ),
+    );
+  }
+}
