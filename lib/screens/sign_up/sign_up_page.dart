@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
 import 'package:flutter_procrew/business_logic/signup_cubit/sign_up_cubit.dart';
 import 'package:flutter_procrew/dependencies/dependency_init.dart';
-import 'package:flutter_procrew/repository/authentication_repository.dart';
 
 import 'sign_up_form.dart';
 
@@ -12,13 +12,18 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: BlocProvider<SignUpCubit>(
-          create: (_) => SignUpCubit(getIt<AuthenticationRepository>()),
-          child: const SignUpForm(),
-        ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.blue,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<SignUpCubit>(
+            create: (_) => getIt<SignUpCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => getIt<ShowPasswordCubit>(),
+          )
+        ],
+        child: const SignUpForm(),
       ),
     );
   }

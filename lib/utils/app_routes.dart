@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_procrew/business_logic/notes_list_bloc/note_list_bloc.dart';
+import 'package:flutter_procrew/business_logic/send_voice/voice_message_cubit.dart';
+import 'package:flutter_procrew/dependencies/dependency_init.dart';
 import 'package:flutter_procrew/screens/home_screen.dart';
 import 'package:flutter_procrew/screens/login/login_page.dart';
 import 'package:flutter_procrew/screens/sign_up/sign_up_page.dart';
@@ -18,7 +22,14 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => SignUpPage());
 
       case AppRoutesName.HOME_SCREEN:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(create: (_) => getIt<VoiceMessageCubit>()),
+                    BlocProvider(create: (_) => getIt<NoteListBloc>()),
+                  ],
+                  child: HomeScreen(),
+                ));
       case AppRoutesName.SPLASH_SCREEN:
         return MaterialPageRoute(builder: (_) => SplashScreen());
       default:

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/login_cubit/login_cubit.dart';
 import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
@@ -35,26 +37,57 @@ class LoginForm extends StatelessWidget {
           Navigator.pushReplacementNamed(context, AppRoutesName.HOME_SCREEN);
         }
       },
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Image.asset(
-            //   'assets/bloc_logo_small.png',
-            //   height: 120,
-            // ),
-            SizedBox(height: 16.h),
-            const _EmailInput(),
-            SizedBox(height: 8.h),
-            const _PasswordInput(),
-            SizedBox(height: 8.h),
-            const _LoginButton(),
-            SizedBox(height: 8.h),
-            const _GoogleLoginButton(),
-            const _FacebookLoginButton(),
-            SizedBox(height: 4.h),
-            _SignUpButton(),
-          ],
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding: EdgeInsets.only(
+          top: 30.h,
+          left: 12.w,
+          right: 12.w,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: SingleChildScrollView(
+          primary: true,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 70.h,
+              ),
+              Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 25.sp,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 12.w),
+                child: Text(
+                  'Pro Crew App',
+                  style: TextStyle(
+                      fontSize: 35.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue),
+                ),
+              ),
+              SizedBox(height: 18.h),
+              _EmailInput(),
+              SizedBox(height: 18.h),
+              _PasswordInput(),
+              SizedBox(height: 18.h),
+              _LoginButton(),
+              SizedBox(height: 18.h),
+              _GoogleLoginButton(),
+              SizedBox(height: 18.h),
+              _FacebookLoginButton(),
+              SizedBox(height: 18.h),
+              _SignUpButton(),
+              SizedBox(height: 18.h),
+            ],
+          ),
         ),
       ),
     );
@@ -72,9 +105,8 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           maxLines: 1,
           textAlignVertical: TextAlignVertical.center,
-          key: const Key('loginForm_passwordInput_textField'),
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
@@ -94,17 +126,20 @@ class _EmailInput extends StatelessWidget {
             floatingLabelBehavior: FloatingLabelBehavior.never,
             contentPadding: EdgeInsets.all(8.r),
             prefixIcon: Container(
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius:
+                      BorderRadius.horizontal(left: Radius.circular(8.r))),
               width: 50.w,
               margin: EdgeInsets.only(right: 15.w),
               child: const Icon(
-                Icons.password_rounded,
+                Icons.email,
                 color: Colors.white,
               ),
             ),
             isDense: true,
           ),
-          keyboardType: TextInputType.visiblePassword,
+          keyboardType: TextInputType.emailAddress,
         );
       },
     );
@@ -146,7 +181,10 @@ class _PasswordInput extends StatelessWidget {
             floatingLabelBehavior: FloatingLabelBehavior.never,
             contentPadding: EdgeInsets.all(8.r),
             prefixIcon: Container(
-              color: Colors.blue,
+              decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius:
+                      BorderRadius.horizontal(left: Radius.circular(8.r))),
               width: 50.w,
               margin: EdgeInsets.only(right: 15.w),
               child: const Icon(
@@ -175,25 +213,25 @@ class _LoginButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  shape: state.status.isSubmissionInProgress
-                      ? const CircleBorder()
-                      : RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r)),
-                  fixedSize: Size(110.w, 50.h),
-                  elevation: 5.0,
-                ),
-                key: const Key('loginForm_continue_raisedButton'),
-                child: state.status.isSubmissionInProgress
-                    ? CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text('Signin'),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
-              );
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+            shape: state.status.isSubmissionInProgress
+                ? const CircleBorder()
+                : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r)),
+            fixedSize: Size(110.w, 50.h),
+            elevation: 5.0,
+          ),
+          key: const Key('loginForm_continue_raisedButton'),
+          child: state.status.isSubmissionInProgress
+              ? CircularProgressIndicator(
+            color: Colors.white,
+          )
+              : const Text('Signin'),
+          onPressed: state.status.isValidated
+              ? () => context.read<LoginCubit>().logInWithCredentials()
+              : null,
+        );
       },
     );
   }
@@ -215,8 +253,9 @@ class _GoogleLoginButton extends StatelessWidget {
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(12.r),
         ),
+        fixedSize: Size(200.w, 50.h),
         primary: theme.colorScheme.secondary,
       ),
     );
@@ -239,8 +278,9 @@ class _FacebookLoginButton extends StatelessWidget {
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(12.r),
         ),
+        fixedSize: Size(200.w, 50.h),
         primary: theme.colorScheme.secondary,
       ),
     );
