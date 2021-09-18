@@ -8,12 +8,12 @@ import 'firebase_api.dart';
 
 @injectable
 class StorageRepository {
-  static Future<String> uploadFile(String chatId, File file) async {
+  static Future<String> uploadFile(String userId, File file) async {
     if (file == null) return null;
 
     final fileName = basename(file.path);
     print('filename $fileName');
-    final destination = '$chatId/$fileName';
+    final destination = '$userId/$fileName';
     final UploadTask task = FirebaseApi.uploadFile(destination, file);
 
     if (task == null) return null;

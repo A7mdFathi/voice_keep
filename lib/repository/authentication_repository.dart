@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-
-import '../models/user.dart';
 
 class SignUpFailure implements Exception {}
 
@@ -40,17 +39,23 @@ class AuthenticationRepository {
 
   Stream<firebase_auth.User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? User.empty : firebaseUser;
+      final user = firebaseUser == null ? null : firebaseUser;
       return user;
     });
   }
 
   Future<void> signUp({String email, String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      final user = credential.user;
+      FirebaseFirestore.instance.collection('users').doc('${user.uid}').set({
+        "username": user.displayName,
+        "email": user.email,
+        "id": user.uid,
+      });
     } on Exception {
       throw SignUpFailure();
     }

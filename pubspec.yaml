@@ -49,9 +49,6 @@ dependencies:
   injectable: ^1.4.1
   get_it: ^7.1.0
 
-
-
-
   flutter_sound_lite: ^8.3.12
   permission_handler: ^8.1.4+2
 

@@ -8,7 +8,6 @@ import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:injectable/injectable.dart';
 
 part 'authentication_event.dart';
-
 part 'authentication_state.dart';
 
 @singleton
@@ -39,7 +38,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAppStarted() async* {
     yield AuthenticationLoading();
     await Future.delayed(Duration(seconds: 7));
-    user = _authenticationRepository.currentUser;
+    user = await _authenticationRepository.currentUser;
 
     if (user != null) {
       yield AuthenticationStateAuthenticated(user: user);

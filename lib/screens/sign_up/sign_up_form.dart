@@ -102,7 +102,7 @@ class _EmailInput extends StatelessWidget {
           textAlignVertical: TextAlignVertical.center,
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
@@ -151,11 +151,10 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           maxLines: 1,
           textAlignVertical: TextAlignVertical.center,
-          key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
               context.read<SignUpCubit>().passwordChanged(password),
           obscureText: !context.watch<ShowPasswordCubit>().state,
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
@@ -186,7 +185,7 @@ class _PasswordInput extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            suffixIcon: ShowPasswordWidget(),
+            suffixIcon: buildButton(context),
             isDense: true,
           ),
           keyboardType: TextInputType.visiblePassword,
@@ -241,7 +240,7 @@ class _ConfirmPasswordInput extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            suffixIcon: ShowPasswordWidget(),
+            suffixIcon: buildButton(context),
             isDense: true,
           ),
           keyboardType: TextInputType.visiblePassword,
@@ -260,7 +259,6 @@ class _SignUpButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('signUpForm_continue_raisedButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

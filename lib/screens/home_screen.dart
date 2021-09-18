@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/auth/authentication_bloc.dart';
 import 'package:flutter_procrew/business_logic/send_voice/voice_message_cubit.dart';
+import 'package:flutter_procrew/dependencies/dependency_init.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/src/provider.dart';
 
@@ -12,31 +13,52 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () => context.read<AuthenticationBloc>()
-                  ..add(AuthenticationLogout()),
-                icon: Icon(Icons.logout))
-          ],
-          title: Text('Home'),
-          centerTitle: true,
-        ),
-        body: Container(
-          color: Colors.white,
-          child: BlocBuilder<NoteListBloc, NoteListState>(
-            builder: (context, state) {
-              return ListView.builder(
-                itemBuilder: (context, index) => ListTile(),
-              );
-            },
+    final user = context.read<AuthenticationBloc>().user;
+    return BlocProvider(
+      lazy: false,
+      create: (context) =>
+          getIt<NoteListBloc>()..add(NotesListFetched(user.uid)),
+      child: BlocListener<VoiceMessageCubit, VoiceMessageState>(
+        listener: (context, state) {
+          if (state is VoiceMessageRecorded) {
+            buildShowDialog(context);
+          }
+        },
+        child: WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              actions: [
+                IconButton(
+                    onPressed: () => context.read<AuthenticationBloc>()
+                      ..add(AuthenticationLogout()),
+                    icon: Icon(Icons.logout))
+              ],
+              title: Text('Home'),
+              centerTitle: true,
+            ),
+            body: Container(
+                color: Colors.white,
+                child: BlocBuilder<NoteListBloc, NoteListState>(
+                  builder: (context, state) {
+                    if (state is NoteListLoaded) {
+                      final list = state.noteList;
+                      return ListView.builder(
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text('${list[index].data().noteUrl}'),
+                          );
+                        },
+                      );
+                    }
+                    return Container();
+                  },
+                )),
+            floatingActionButton: _VoiceButtonWidget(),
           ),
         ),
-        floatingActionButton: _VoiceButtonWidget(),
       ),
     );
   }
@@ -72,4 +94,86 @@ class _VoiceButtonWidget extends StatelessWidget {
       );
     });
   }
+}
+
+Future<dynamic> buildShowDialog(BuildContext context) {
+  return showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (_) {
+      return Dialog(
+        backgroundColor: Colors.white,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+        elevation: 25.0,
+        insetPadding: EdgeInsets.all(12.r),
+        insetAnimationDuration: Duration(milliseconds: 1000),
+        insetAnimationCurve: Curves.bounceInOut,
+        child: Container(
+          width: 0.70.sw,
+          height: 0.30.sh,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Spacer(),
+              Icon(
+                Icons.sentiment_satisfied_alt,
+                size: 40.sp,
+                color: Colors.blue,
+              ),
+              const Spacer(),
+              Text(
+                'Save This Record',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16.sp, color: Colors.blue),
+              ),
+              const Spacer(),
+              Padding(
+                padding: EdgeInsets.all(20.r),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        alignment: Alignment.center,
+                        shape: const StadiumBorder(),
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        primary: Colors.blue,
+                      ),
+                      onPressed: () {
+                        context.read<VoiceMessageCubit>().sendVoice();
+
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text('Yes'),
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        alignment: Alignment.center,
+                        shape: const StadiumBorder(),
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        primary: Colors.blue,
+                      ),
+                      onPressed: () {
+                        context.read<VoiceMessageCubit>().cancelSendVoice();
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text('No'),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

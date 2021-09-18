@@ -8,7 +8,7 @@ class FirebaseApi {
       final reference = FirebaseStorage.instance.ref(destination);
       return reference.putFile(file);
     } catch (e, s) {
-      throw e;
+      throw FirebaseStorageException(e.toString());
     }
   }
 }

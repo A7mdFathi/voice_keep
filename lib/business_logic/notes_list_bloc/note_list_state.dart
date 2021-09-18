@@ -13,3 +13,13 @@ class NoteListLoading extends NoteListState {
   @override
   List<Object> get props => [];
 }
+
+class NoteListLoaded extends NoteListState {
+  final List<QueryDocumentSnapshot<Note>> noteList;
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [noteList];
+
+  NoteListLoaded(this.noteList);
+}

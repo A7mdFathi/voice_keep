@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/login_cubit/login_cubit.dart';
 import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
-import 'package:flutter_procrew/dependencies/dependency_init.dart';
 import 'package:flutter_procrew/utils/app_routes_name.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -192,7 +191,7 @@ class _PasswordInput extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            suffixIcon: ShowPasswordWidget(),
+            suffixIcon: buildButton(context),
             isDense: true,
           ),
           keyboardType: TextInputType.visiblePassword,
@@ -303,28 +302,17 @@ class _SignUpButton extends StatelessWidget {
   }
 }
 
-class ShowPasswordWidget extends StatelessWidget {
-  const ShowPasswordWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ShowPasswordCubit>(),
-      child: IconButton(
-        onPressed: () =>
-            context.read<ShowPasswordCubit>().showPasswordToState(),
-        icon: Builder(
-          builder: (context) {
-            final bool _shwPass = context.watch<ShowPasswordCubit>().state;
-            return Icon(
-              !_shwPass ? Icons.visibility_off_rounded : Icons.visibility,
-              color: Colors.blue,
-            );
-          },
-        ),
-      ),
-    );
-  }
+buildButton(BuildContext context) {
+  return IconButton(
+    onPressed: () => context.read<ShowPasswordCubit>().showPasswordToState(),
+    icon: Builder(
+      builder: (context) {
+        final bool _shwPass = context.watch<ShowPasswordCubit>().state;
+        return Icon(
+          !_shwPass ? Icons.visibility_off_rounded : Icons.visibility,
+          color: Colors.blue,
+        );
+      },
+    ),
+  );
 }
