@@ -54,14 +54,31 @@ class HomeScreen extends StatelessWidget {
                   builder: (context, state) {
                     if (state is NoteListLoaded) {
                       final list = state.noteList;
+
                       return ListView.builder(
                         itemCount: list.length,
+                        primary: true,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.h,
+                        ),
                         itemBuilder: (context, index) {
                           final note = list[index].data();
-                          return ListTile(
-                            title:
-                                VoiceMessageWidget(voiceUrl: '${note.noteUrl}'),
-                            // title: Text('${list[index].data().noteUrl}'),
+
+                          return Dismissible(
+                            background: Container(
+                              color: Colors.red,
+                            ),
+                            key: Key('Item-$index'),
+                            onDismissed: (direction) {
+                              context.read<NoteListBloc>()
+                                ..add(NoteDeleteFetched(user.id, '1'));
+                              print('Note Deleted Fetch');
+                            },
+                            child: ListTile(
+                              title: VoiceMessageWidget(
+                                  voiceUrl: '${note.noteUrl}'),
+                              subtitle: Text('${note.time.toDate()}'),
+                            ),
                           );
                         },
                       );

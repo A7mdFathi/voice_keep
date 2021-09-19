@@ -23,3 +23,19 @@ class NoteListLoaded extends NoteListState {
 
   NoteListLoaded(this.noteList);
 }
+
+class NoteDeletedSuccess extends NoteListState {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+
+  NoteDeletedSuccess();
+}
+
+class NoteDeletedFailure extends NoteListState {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+
+  NoteDeletedFailure();
+}

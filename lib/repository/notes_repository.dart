@@ -4,9 +4,10 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class NoteRepository {
+  final ref = FirebaseFirestore.instance.collection('users');
+
   Stream<List<QueryDocumentSnapshot<Note>>> getNotes(String id) {
-    final ref = FirebaseFirestore.instance
-        .collection('users')
+    final snaps = ref
         .doc(id)
         .collection('notes')
         .withConverter<Note>(
@@ -16,6 +17,10 @@ class NoteRepository {
         .snapshots()
         .map((snapshot) => snapshot.docs);
 
-    return ref;
+    return snaps;
+  }
+
+  deleteNote(String userId, String noteId) async {
+    return ref.doc(userId).collection('notes').doc(noteId).delete();
   }
 }

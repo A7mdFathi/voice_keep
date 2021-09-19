@@ -8,6 +8,7 @@ import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:flutter_procrew/repository/record_repository.dart';
 import 'package:flutter_procrew/repository/storage_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 part 'voice_message_state.dart';
 
@@ -21,11 +22,13 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
         super(VoiceMessageInitial()) {
     _recordRepository.openSession();
   }
+
   final AuthenticationRepository _authenticationRepository;
   final RecordRepository _recordRepository;
 
   String _voicePath;
   File _file;
+  final uuid = Uuid();
 
   Future<void> startRecording() async {
     _recordRepository.startRecording();
@@ -48,14 +51,18 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
     _file = File(_voicePath);
     if (_file == null) return;
     final voiceUrl = await StorageRepository.uploadFile(user.id, _file);
+    final uuidV4 = uuid.v4();
     FirebaseFirestore.instance
         .collection('users')
         .doc('${user.id}')
         .collection('notes')
-        .add({
+        .doc('$uuidV4')
+        .set({
+      "noteId": uuidV4,
       "noteUrl": voiceUrl,
       "time": Timestamp.now(),
     });
+
     emit(VoiceMessageSent());
   }
 

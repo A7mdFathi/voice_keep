@@ -13,6 +13,17 @@ class NotesListFetched extends NoteListEvent {
   List<Object> get props => [userId];
 }
 
+class NoteDeleteFetched extends NoteListEvent {
+  final String userId;
+  final String noteId;
+
+  NoteDeleteFetched(this.userId, this.noteId);
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [userId, noteId];
+}
+
 class NotesListUpdated extends NoteListEvent {
   final List<QueryDocumentSnapshot<Note>> notes;
 

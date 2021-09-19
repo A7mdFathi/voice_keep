@@ -9,14 +9,15 @@ import 'business_logic/auth/authentication_bloc.dart';
 import 'dependencies/dependency_init.dart';
 
 class App extends StatelessWidget {
-  const App({
+   App({
     Key key,
   }) : super(key: key);
+  AuthenticationBloc _authenticationBloc = getIt<AuthenticationBloc>();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      create: (_) => getIt<AuthenticationBloc>(),
+      create: (_) => _authenticationBloc,
       child: ScreenUtilInit(
         designSize: Size(360, 730),
         builder: () => AppView(),
@@ -36,42 +37,47 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  AuthenticationBloc _authenticationBloc;
 
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
+    _authenticationBloc = BlocProvider.of(context);
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        navigatorKey: _navigatorKey,
-        title: 'Pro Crew App',
-        onGenerateRoute: AppRoutes.onGeneratedRoutes,
-        builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            bloc: getIt<AuthenticationBloc>(),
-            listener: (context, state) {
-              switch (state.status) {
-                case AppStatus.authenticated:
-                  print(' NAVIGATOR IS IN HOME SCREEN');
-                  _navigator.pushNamedAndRemoveUntil<void>(
-                    AppRoutesName.HOME_SCREEN,
-                    (route) => false,
-                  );
-                  break;
-                case AppStatus.unauthenticated:
-                  print(' NAVIGATOR IS IN Login SCREEN');
+      debugShowCheckedModeBanner: false,
+      navigatorKey: _navigatorKey,
+      title: 'Pro Crew App',
+      builder: (context, child) {
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          // bloc: _authenticationBloc,
+          listener: (context, state) {
+            print('state:${state.status}');
+            switch (state.status) {
+              case AppStatus.authenticated:
+                print(' NAVIGATOR IS IN HOME SCREEN');
+                _navigator.pushNamedAndRemoveUntil<void>(
+                  AppRoutesName.HOME_SCREEN,
+                  (route) => false,
+                );
 
-                  _navigator.pushNamedAndRemoveUntil<void>(
-                    AppRoutesName.LOGIN_SCREEN,
-                    (route) => false,
-                  );
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: child,
-          );
-        });
+                break;
+              case AppStatus.unauthenticated:
+                print(' NAVIGATOR IS IN Login SCREEN');
+
+                _navigator.pushNamedAndRemoveUntil<void>(
+                  AppRoutesName.LOGIN_SCREEN,
+                  (route) => false,
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          child: child,
+        );
+      },
+      onGenerateRoute: AppRoutes.onGeneratedRoutes,
+    );
   }
 }

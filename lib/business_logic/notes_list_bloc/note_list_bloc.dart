@@ -24,6 +24,8 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
       yield* _mapList(event);
     } else if (event is NotesListUpdated) {
       yield* _updateList(event);
+    } else if (event is NoteDeleteFetched) {
+      yield* _deleteNote(event);
     }
   }
 
@@ -47,5 +49,14 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   Stream<NoteListState> _updateList(NotesListUpdated event) async* {
     yield NoteListLoaded(event.notes);
+  }
+
+  Stream<NoteListState> _deleteNote(NoteDeleteFetched event) async* {
+    try {
+      noteRepository.deleteNote(event.userId, event.noteId);
+      yield NoteDeletedSuccess();
+    } catch (e) {
+      yield NoteDeletedFailure();
+    }
   }
 }

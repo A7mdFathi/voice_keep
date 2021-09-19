@@ -45,7 +45,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
       children: [
         ControlButtons(_audioPlayer),
         Text(
-          '${_audioPlayer.duration?.inSeconds} seconds',
+          '${_audioPlayer.duration?.inSeconds ?? ''} seconds',
         )
       ],
     );

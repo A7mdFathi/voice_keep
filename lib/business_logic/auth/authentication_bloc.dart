@@ -28,12 +28,16 @@ class AuthenticationBloc
   final AuthenticationRepository _authenticationRepository;
   StreamSubscription<User> _userSubscription;
 
-  void _onUserChanged(User user) => add(AppUserChanged(user));
+  void _onUserChanged(User user) {
+    print(user.email);
+    add(AppUserChanged(user));
+  }
 
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppUserChanged) {
+      await Future.delayed(Duration(seconds: 10));
       yield _mapUserChangedToState(event, state);
     } else if (event is AppLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
@@ -42,9 +46,13 @@ class AuthenticationBloc
 
   AuthenticationState _mapUserChangedToState(
       AppUserChanged event, AuthenticationState state) {
-    return event.user.isNotEmpty
-        ? AuthenticationState.authenticated(event.user)
-        : const AuthenticationState.unauthenticated();
+    try {
+      return event.user.isNotEmpty
+          ? AuthenticationState.authenticated(event.user)
+          : const AuthenticationState.unauthenticated();
+    } catch (e) {
+      return AuthenticationState.unauthenticated();
+    }
   }
 
   @override
