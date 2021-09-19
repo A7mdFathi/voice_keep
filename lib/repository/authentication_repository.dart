@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_procrew/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
@@ -20,7 +21,6 @@ class LoginWithPhoneNumberFailure implements Exception {}
 
 @singleton
 class AuthenticationRepository {
-  /// {@macro authentication_repository}
   AuthenticationRepository({
     firebase_auth.FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignIn,
@@ -33,15 +33,18 @@ class AuthenticationRepository {
   final GoogleSignIn _googleSignIn;
   final FacebookAuth _facebookAuth;
 
-  firebase_auth.User get currentUser {
-    return _firebaseAuth.currentUser;
-  }
-
-  Stream<firebase_auth.User> get user {
+  Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? null : firebaseUser;
+      final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
+//TODO shared pref
       return user;
     });
+  }
+
+  User get currentUser {
+    final user = _firebaseAuth.currentUser;
+
+    return user == null ? User.empty : user.toUser; //todo shared pref
   }
 
   Future<void> signUp({String email, String password}) async {
@@ -50,11 +53,13 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      final user = credential.user;
-      FirebaseFirestore.instance.collection('users').doc('${user.uid}').set({
-        "username": user.displayName,
-        "email": user.email,
-        "id": user.uid,
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(credential.user.uid)
+          .set({
+        "username": credential.user.displayName,
+        "email": credential.user.email,
+        "id": credential.user.uid,
       });
     } on Exception {
       throw SignUpFailure();
@@ -116,5 +121,11 @@ class AuthenticationRepository {
     } on Exception {
       throw LogOutFailure();
     }
+  }
+}
+
+extension on firebase_auth.User {
+  User get toUser {
+    return User(id: uid, email: email, name: displayName, photo: photoURL);
   }
 }

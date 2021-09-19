@@ -1,33 +1,25 @@
 part of 'authentication_bloc.dart';
 
-abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
+enum AppStatus {
+  authenticated,
+  unauthenticated,
 }
 
-class AuthenticationInitial extends AuthenticationState {
-  @override
-  List<Object> get props => [];
-}
+class AuthenticationState extends Equatable {
+  const AuthenticationState._({
+    @required this.status,
+    this.user = User.empty,
+  });
 
-class AuthenticationStateAuthenticated extends AuthenticationState {
-  final firebase_auth.User user;
+  const AuthenticationState.authenticated(User user)
+      : this._(status: AppStatus.authenticated, user: user);
 
-  AuthenticationStateAuthenticated({@required this.user});
+  const AuthenticationState.unauthenticated()
+      : this._(status: AppStatus.unauthenticated);
 
-  @override
-  List<Object> get props => [user];
-}
-
-class AuthenticationUnauthenticated extends AuthenticationState {
-  AuthenticationUnauthenticated();
+  final AppStatus status;
+  final User user;
 
   @override
-  List<Object> get props => [];
-}
-
-class AuthenticationLoading extends AuthenticationState {
-  AuthenticationLoading();
-
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [status, user];
 }

@@ -16,18 +16,62 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
-      lazy: false,
-      create: (_) =>
-          getIt<AuthenticationBloc>()..add(AuthenticationAppStarted()),
+      create: (_) => getIt<AuthenticationBloc>(),
       child: ScreenUtilInit(
         designSize: Size(360, 730),
-        builder: () => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Booking App',
-          initialRoute: AppRoutesName.SPLASH_SCREEN,
-          onGenerateRoute: AppRoutes.onGeneratedRoutes,
-        ),
+        builder: () => AppView(),
       ),
     );
+  }
+}
+
+class AppView extends StatefulWidget {
+  const AppView({
+    Key key,
+  });
+
+  @override
+  State<AppView> createState() => _AppViewState();
+}
+
+class _AppViewState extends State<AppView> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  NavigatorState get _navigator => _navigatorKey.currentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        navigatorKey: _navigatorKey,
+        title: 'Pro Crew App',
+        onGenerateRoute: AppRoutes.onGeneratedRoutes,
+        builder: (context, child) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            bloc: getIt<AuthenticationBloc>(),
+            listener: (context, state) {
+              switch (state.status) {
+                case AppStatus.authenticated:
+                  print(' NAVIGATOR IS IN HOME SCREEN');
+                  _navigator.pushNamedAndRemoveUntil<void>(
+                    AppRoutesName.HOME_SCREEN,
+                    (route) => false,
+                  );
+                  break;
+                case AppStatus.unauthenticated:
+                  print(' NAVIGATOR IS IN Login SCREEN');
+
+                  _navigator.pushNamedAndRemoveUntil<void>(
+                    AppRoutesName.LOGIN_SCREEN,
+                    (route) => false,
+                  );
+                  break;
+                default:
+                  break;
+              }
+            },
+            child: child,
+          );
+        });
   }
 }

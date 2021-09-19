@@ -21,7 +21,6 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
         super(VoiceMessageInitial()) {
     _recordRepository.openSession();
   }
-
   final AuthenticationRepository _authenticationRepository;
   final RecordRepository _recordRepository;
 
@@ -48,10 +47,10 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
     emit(VoiceMessageSending());
     _file = File(_voicePath);
     if (_file == null) return;
-    final voiceUrl = await StorageRepository.uploadFile(user.uid, _file);
+    final voiceUrl = await StorageRepository.uploadFile(user.id, _file);
     FirebaseFirestore.instance
         .collection('users')
-        .doc('${user.uid}')
+        .doc('${user.id}')
         .collection('notes')
         .add({
       "noteUrl": voiceUrl,

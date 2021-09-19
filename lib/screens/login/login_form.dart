@@ -25,16 +25,6 @@ class LoginForm extends StatelessWidget {
               ),
             );
         }
-        if (state.status.isSubmissionSuccess) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                content: Text('Authentication Success'),
-              ),
-            );
-          Navigator.pushReplacementNamed(context, AppRoutesName.HOME_SCREEN);
-        }
       },
       child: Container(
         width: double.infinity,
@@ -223,10 +213,10 @@ class _LoginButton extends StatelessWidget {
           ),
           key: const Key('loginForm_continue_raisedButton'),
           child: state.status.isSubmissionInProgress
-              ? CircularProgressIndicator(
-            color: Colors.white,
-          )
-              : const Text('Signin'),
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text('Signin'),
           onPressed: state.status.isValidated
               ? () => context.read<LoginCubit>().logInWithCredentials()
               : null,
@@ -293,7 +283,7 @@ class _SignUpButton extends StatelessWidget {
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
       onPressed: () =>
-          Navigator.pushNamed(context, AppRoutesName.SIGNUP_SCREEN),
+          Navigator.pushReplacementNamed(context, AppRoutesName.SIGNUP_SCREEN),
       child: Text(
         'CREATE ACCOUNT',
         style: TextStyle(color: theme.primaryColor),

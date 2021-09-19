@@ -14,7 +14,6 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository) : super(const LoginState());
 
   final AuthenticationRepository _authenticationRepository;
-
   void emailChanged(String value) {
     final email = Email.dirty(value);
     emit(state.copyWith(
@@ -40,6 +39,7 @@ class LoginCubit extends Cubit<LoginState> {
         email: state.email.value,
         password: state.password.value,
       );
+
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
@@ -62,6 +62,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await _authenticationRepository.logInWithFacebook();
+
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/auth/authentication_bloc.dart';
-import 'package:flutter_procrew/utils/app_routes_name.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'login/login_page.dart';
+import '../business_logic/auth/authentication_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -12,18 +11,29 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        if (state is AuthenticationUnauthenticated) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => LoginPage()), (r) => true);
-        } else if (state is AuthenticationStateAuthenticated) {
-          Navigator.of(context).pushNamed(AppRoutesName.HOME_SCREEN);
+        if (state.status == AppStatus.unauthenticated) {
+          print('SPLASH BLOC LISTEN');
+        } else if (state.status == AppStatus.unauthenticated) {
+          print('SPLASH BLOC LISTEN');
         }
       },
       child: Scaffold(
-          body: Container(
-        child: Center(
-          child: Text('Splash Screen'),
-        ),
+          body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            'Pro Crew ',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 45.sp,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const Center(child: CircularProgressIndicator()),
+          SizedBox(height: 12.h),
+        ],
       )),
     );
   }

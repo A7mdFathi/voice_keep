@@ -15,6 +15,8 @@ class AppRoutes {
     final args = settings.arguments;
 
     switch (settings.name) {
+      case AppRoutesName.SPLASH_SCREEN:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
       case AppRoutesName.LOGIN_SCREEN:
         return MaterialPageRoute(builder: (_) => LoginPage());
 
@@ -30,8 +32,7 @@ class AppRoutes {
                   ],
                   child: HomeScreen(),
                 ));
-      case AppRoutesName.SPLASH_SCREEN:
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+
       default:
         return _errorRoute();
     }

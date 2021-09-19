@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_procrew/models/user.dart';
 import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,49 +13,43 @@ part 'authentication_state.dart';
 @singleton
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({
-    @required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
-        super(AuthenticationInitial());
+  AuthenticationBloc(
+      {@required AuthenticationRepository authenticationRepository})
+      : _authenticationRepository = authenticationRepository,
+        super(
+          authenticationRepository.currentUser.isNotEmpty
+              ? AuthenticationState.authenticated(
+                  authenticationRepository.currentUser)
+              : const AuthenticationState.unauthenticated(),
+        ) {
+    _userSubscription = _authenticationRepository.user.listen(_onUserChanged);
+  }
 
   final AuthenticationRepository _authenticationRepository;
+  StreamSubscription<User> _userSubscription;
 
-  firebase_auth.User user;
+  void _onUserChanged(User user) => add(AppUserChanged(user));
 
   @override
   Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    if (event is AuthenticationAppStarted) {
-      yield* _mapAppStarted();
-    } else if (event is AuthenticationLogout) {
-      yield* _logOut();
-    } else if (event is AuthenticationLogged) {
-      yield* _login(event);
+      AuthenticationEvent event) async* {
+    if (event is AppUserChanged) {
+      yield _mapUserChangedToState(event, state);
+    } else if (event is AppLogoutRequested) {
+      unawaited(_authenticationRepository.logOut());
     }
   }
 
-  Stream<AuthenticationState> _mapAppStarted() async* {
-    yield AuthenticationLoading();
-    await Future.delayed(Duration(seconds: 7));
-    user = await _authenticationRepository.currentUser;
-
-    if (user != null) {
-      yield AuthenticationStateAuthenticated(user: user);
-    } else {
-      yield AuthenticationUnauthenticated();
-    }
+  AuthenticationState _mapUserChangedToState(
+      AppUserChanged event, AuthenticationState state) {
+    return event.user.isNotEmpty
+        ? AuthenticationState.authenticated(event.user)
+        : const AuthenticationState.unauthenticated();
   }
 
-  Stream<AuthenticationState> _logOut() async* {
-    yield AuthenticationLoading();
-
-    await _authenticationRepository.logOut();
-    yield AuthenticationUnauthenticated();
-  }
-
-  Stream<AuthenticationState> _login(AuthenticationLogged event) async* {
-    yield AuthenticationLoading();
-    yield AuthenticationStateAuthenticated(user: user);
+  @override
+  Future<void> close() {
+    _userSubscription.cancel();
+    return super.close();
   }
 }

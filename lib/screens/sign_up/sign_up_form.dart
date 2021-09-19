@@ -135,7 +135,7 @@ class _EmailInput extends StatelessWidget {
             ),
             isDense: true,
           ),
-          keyboardType: TextInputType.visiblePassword,
+          keyboardType: TextInputType.emailAddress,
         );
       },
     );

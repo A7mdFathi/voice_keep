@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/auth/authentication_bloc.dart';
 import 'package:flutter_procrew/business_logic/send_voice/voice_message_cubit.dart';
 import 'package:flutter_procrew/dependencies/dependency_init.dart';
+import 'package:flutter_procrew/widgets/record_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/src/provider.dart';
 
@@ -11,13 +12,22 @@ import '../business_logic/notes_list_bloc/note_list_bloc.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
 
+  static Route route() => MaterialPageRoute<void>(
+      builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<VoiceMessageCubit>()),
+              BlocProvider(create: (_) => getIt<NoteListBloc>()),
+            ],
+            child: HomeScreen(),
+          ));
+
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthenticationBloc>().user;
+    final user = context.read<AuthenticationBloc>().state.user;
     return BlocProvider(
       lazy: false,
       create: (context) =>
-          getIt<NoteListBloc>()..add(NotesListFetched(user.uid)),
+          getIt<NoteListBloc>()..add(NotesListFetched(user.id)),
       child: BlocListener<VoiceMessageCubit, VoiceMessageState>(
         listener: (context, state) {
           if (state is VoiceMessageRecorded) {
@@ -32,7 +42,7 @@ class HomeScreen extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () => context.read<AuthenticationBloc>()
-                      ..add(AuthenticationLogout()),
+                      ..add(AppLogoutRequested()),
                     icon: Icon(Icons.logout))
               ],
               title: Text('Home'),
@@ -47,16 +57,23 @@ class HomeScreen extends StatelessWidget {
                       return ListView.builder(
                         itemCount: list.length,
                         itemBuilder: (context, index) {
+                          final note = list[index].data();
                           return ListTile(
-                            title: Text('${list[index].data().noteUrl}'),
+                            title:
+                                VoiceMessageWidget(voiceUrl: '${note.noteUrl}'),
+                            // title: Text('${list[index].data().noteUrl}'),
                           );
                         },
                       );
+                    } else if (state is NoteListLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
-                    return Container();
+                    return const SizedBox();
                   },
                 )),
-            floatingActionButton: _VoiceButtonWidget(),
+            floatingActionButton: const _VoiceButtonWidget(),
           ),
         ),
       ),

@@ -16,7 +16,6 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   StreamSubscription notesStream;
   final NoteRepository noteRepository;
-
   @override
   Stream<NoteListState> mapEventToState(
     NoteListEvent event,
@@ -31,7 +30,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   Stream<NoteListState> _mapList(NotesListFetched event) async* {
     yield NoteListLoading();
     notesStream?.cancel();
-    notesStream = noteRepository.getNoteRefrence(event.userId).listen(
+    notesStream = noteRepository.getNotes(event.userId).listen(
       (notes) {
         add(NotesListUpdated(notes.toList()));
       },

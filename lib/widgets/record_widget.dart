@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
-
 class VoiceMessageWidget extends StatefulWidget {
   const VoiceMessageWidget({
     Key key,
@@ -17,7 +16,6 @@ class VoiceMessageWidget extends StatefulWidget {
 class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
   AudioPlayer _audioPlayer;
   bool _isPlaying = false;
-
   @override
   void initState() {
     super.initState();

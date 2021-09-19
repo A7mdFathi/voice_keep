@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "0.1.6"
   bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bloc
       url: "https://pub.dartlang.org"
@@ -335,13 +335,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.0+2"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -534,13 +527,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2"
-  lints:
-    dependency: transitive
-    description:
-      name: lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   logger:
     dependency: transitive
     description:

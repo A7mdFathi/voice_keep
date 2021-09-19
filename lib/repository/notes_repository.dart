@@ -4,10 +4,10 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class NoteRepository {
-  Stream<List<QueryDocumentSnapshot<Note>>> getNoteRefrence(String id) {
+  Stream<List<QueryDocumentSnapshot<Note>>> getNotes(String id) {
     final ref = FirebaseFirestore.instance
         .collection('users')
-        .doc('id')
+        .doc(id)
         .collection('notes')
         .withConverter<Note>(
           fromFirestore: (snapshot, _) => Note.fromJson(snapshot.data()),
