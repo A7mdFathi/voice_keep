@@ -28,7 +28,6 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
 
   String _voicePath;
   File _file;
-  final uuid = Uuid();
 
   Future<void> startRecording() async {
     _recordRepository.startRecording();
@@ -51,14 +50,14 @@ class VoiceMessageCubit extends Cubit<VoiceMessageState> {
     _file = File(_voicePath);
     if (_file == null) return;
     final voiceUrl = await StorageRepository.uploadFile(user.id, _file);
-    final uuidV4 = uuid.v4();
+    final uuid = Uuid().v1();
     FirebaseFirestore.instance
         .collection('users')
         .doc('${user.id}')
         .collection('notes')
-        .doc('$uuidV4')
+        .doc('$uuid')
         .set({
-      "noteId": uuidV4,
+      "noteId": uuid,
       "noteUrl": voiceUrl,
       "time": Timestamp.now(),
     });

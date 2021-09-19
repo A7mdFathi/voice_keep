@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                             key: Key('Item-$index'),
                             onDismissed: (direction) {
                               context.read<NoteListBloc>()
-                                ..add(NoteDeleteFetched(user.id, '1'));
+                                ..add(NoteDeleteFetched(user.id, note.noteId));
                               print('Note Deleted Fetch');
                             },
                             child: ListTile(
@@ -111,7 +111,7 @@ class _VoiceButtonWidget extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),
           primary: state is VoiceMessageRecording ? Colors.white : Colors.grey,
-          fixedSize: Size(80.r, 80.r),
+          fixedSize: Size(65.r, 65.r),
         ),
         onPressed: () async {
           if (state is VoiceMessageRecording) {
