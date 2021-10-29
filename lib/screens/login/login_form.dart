@@ -4,9 +4,10 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/login_cubit/login_cubit.dart';
 import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
+import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:flutter_procrew/utils/app_routes_name.dart';
+import 'package:flutter_procrew/widgets/social_buttons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
 class LoginForm extends StatelessWidget {
@@ -55,7 +56,7 @@ class LoginForm extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 12.w),
                 child: Text(
-                  'Pro Crew App',
+                  'Voice keep',
                   style: TextStyle(
                       fontSize: 35.sp,
                       fontWeight: FontWeight.bold,
@@ -69,9 +70,11 @@ class LoginForm extends StatelessWidget {
               SizedBox(height: 18.h),
               _LoginButton(),
               SizedBox(height: 18.h),
-              _GoogleLoginButton(),
+              GoogleLoginButton(
+                login_type: LOGIN_TYPE.login,
+              ),
               SizedBox(height: 18.h),
-              _FacebookLoginButton(),
+              FacebookLoginButton(),
               SizedBox(height: 18.h),
               _SignUpButton(),
               SizedBox(height: 18.h),
@@ -202,76 +205,26 @@ class _LoginButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
-            shape: state.status.isSubmissionInProgress
-                ? const CircleBorder()
-                : RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r)),
-            fixedSize: Size(110.w, 50.h),
-            elevation: 5.0,
-          ),
-          key: const Key('loginForm_continue_raisedButton'),
-          child: state.status.isSubmissionInProgress
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  shape: state.status.isSubmissionInProgress
+                      ? const CircleBorder()
+                      : RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r)),
+                  fixedSize: Size(110.w, 50.h),
+                  elevation: 5.0,
+                ),
+                key: const Key('loginForm_continue_raisedButton'),
+                child: state.status.isSubmissionInProgress
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )
                     : const Text('Signin'),
-          onPressed: state.status.isValidated
-              ? () => context.read<LoginCubit>().logInWithCredentials()
-              : null,
-        );
+                onPressed: state.status.isValidated
+                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    : null,
+              );
       },
-    );
-  }
-}
-
-class _GoogleLoginButton extends StatelessWidget {
-  const _GoogleLoginButton({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ElevatedButton.icon(
-      key: const Key('loginForm_googleLogin_raisedButton'),
-      onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
-      icon: const Icon(FontAwesomeIcons.google, color: Colors.white),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        fixedSize: Size(200.w, 50.h),
-        primary: theme.colorScheme.secondary,
-      ),
-    );
-  }
-}
-
-class _FacebookLoginButton extends StatelessWidget {
-  const _FacebookLoginButton({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ElevatedButton.icon(
-      key: const Key('loginForm_facebookLogin_raisedButton'),
-      onPressed: () => context.read<LoginCubit>().logInWithFacebook(),
-      icon: const Icon(FontAwesomeIcons.facebook, color: Colors.white),
-      label: const Text(
-        'SIGN IN WITH FACEBOOK',
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        fixedSize: Size(200.w, 50.h),
-        primary: theme.colorScheme.secondary,
-      ),
     );
   }
 }

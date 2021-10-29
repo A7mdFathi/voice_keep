@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
 import 'package:flutter_procrew/business_logic/signup_cubit/sign_up_cubit.dart';
+import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:flutter_procrew/screens/login/login_form.dart';
 import 'package:flutter_procrew/utils/app_routes_name.dart';
+import 'package:flutter_procrew/widgets/social_buttons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 
@@ -51,7 +53,7 @@ class SignUpForm extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 12.w),
                 child: Text(
-                  'Pro Crew App',
+                  'Voice keep',
                   style: TextStyle(
                       fontSize: 35.sp,
                       fontWeight: FontWeight.bold,
@@ -66,6 +68,8 @@ class SignUpForm extends StatelessWidget {
               _ConfirmPasswordInput(),
               SizedBox(height: 18.h),
               _SignUpButton(),
+              SizedBox(height: 18.h),
+              GoogleLoginButton(login_type: LOGIN_TYPE.register),
               SizedBox(height: 18.h),
               Row(
                 mainAxisSize: MainAxisSize.max,

@@ -12,15 +12,6 @@ import '../business_logic/notes_list_bloc/note_list_bloc.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-      builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => getIt<VoiceMessageCubit>()),
-              BlocProvider(create: (_) => getIt<NoteListBloc>()),
-            ],
-            child: HomeScreen(),
-          ));
-
   @override
   Widget build(BuildContext context) {
     final user = context.read<AuthenticationBloc>().state.user;

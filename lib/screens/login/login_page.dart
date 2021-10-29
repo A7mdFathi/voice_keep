@@ -9,28 +9,21 @@ import 'login_form.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
 
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => LoginPage());
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.blue,
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => getIt<LoginCubit>(),
-            ),
-            BlocProvider(
-              create: (_) => getIt<ShowPasswordCubit>(),
-            )
-          ],
-          child: const LoginForm(),
-        ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.blue,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => getIt<LoginCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => getIt<ShowPasswordCubit>(),
+          )
+        ],
+        child: const LoginForm(),
       ),
     );
   }

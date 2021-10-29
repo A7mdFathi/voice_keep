@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_procrew/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,6 +19,8 @@ class LogInWithFacebookFailure implements Exception {}
 class LogOutFailure implements Exception {}
 
 class LoginWithPhoneNumberFailure implements Exception {}
+
+enum LOGIN_TYPE { login, register }
 
 @singleton
 class AuthenticationRepository {
@@ -53,20 +56,14 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(credential.user.uid)
-          .set({
-        "username": credential.user.displayName,
-        "email": credential.user.email,
-        "id": credential.user.uid,
-      });
+      saveIntoFirestore(
+          credential: credential, login_type: LOGIN_TYPE.register);
     } on Exception {
       throw SignUpFailure();
     }
   }
 
-  Future<void> logInWithGoogle() async {
+  Future<void> logInWithGoogle(LOGIN_TYPE login_type) async {
     try {
       final googleUser = await _googleSignIn.signIn();
       final googleAuth = await googleUser?.authentication;
@@ -74,26 +71,13 @@ class AuthenticationRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth?.idToken,
       );
-      await _firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+      if (login_type == LOGIN_TYPE.register) {
+        saveIntoFirestore(credential: userCredential, login_type: login_type);
+      }
     } on Exception {
       throw LogInWithGoogleFailure();
-    }
-  }
-
-  Future<void> logInWithFacebook() async {
-    try {
-      final LoginResult result = await _facebookAuth.login(
-        loginBehavior: LoginBehavior.webOnly,
-      );
-      // Create a credential from the access token
-      final credential = firebase_auth.FacebookAuthProvider.credential(
-          result.accessToken.token);
-      // Once signed in, return the UserCredential
-      await _firebaseAuth.signInWithCredential(credential);
-      _firebaseAuth.currentUser.updatePhotoURL(
-          'https://graph.facebook.com/v2.12/me/picture?height=500&access_token=${result.accessToken.token}');
-    } on Exception {
-      throw LogInWithFacebookFailure();
     }
   }
 
@@ -121,6 +105,20 @@ class AuthenticationRepository {
     } on Exception {
       throw LogOutFailure();
     }
+  }
+
+  saveIntoFirestore(
+      {@required firebase_auth.UserCredential credential,
+      @required LOGIN_TYPE login_type}) async {
+    if (login_type == LOGIN_TYPE.login) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(credential.user.uid)
+        .set({
+      "username": credential.user.displayName,
+      "email": credential.user.email,
+      "id": credential.user.uid,
+    });
   }
 }
 
