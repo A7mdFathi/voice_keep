@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/notes_list_bloc/note_list_bloc.dart';
-import 'package:flutter_procrew/business_logic/send_voice/voice_message_cubit.dart';
-import 'package:flutter_procrew/dependencies/dependency_init.dart';
-import 'package:flutter_procrew/screens/home_screen.dart';
-import 'package:flutter_procrew/screens/login/login_page.dart';
-import 'package:flutter_procrew/screens/sign_up/sign_up_page.dart';
-import 'package:flutter_procrew/screens/splash_screen.dart';
+import 'package:voice_keep/business_logic/notes_list_bloc/note_list_bloc.dart';
+import 'package:voice_keep/business_logic/send_voice/voice_message_cubit.dart';
+import 'package:voice_keep/dependencies/dependency_init.dart';
+import 'package:voice_keep/screens/home_screen.dart';
+import 'package:voice_keep/screens/login/login_page.dart';
+import 'package:voice_keep/screens/sign_up/sign_up_page.dart';
+import 'package:voice_keep/screens/splash_screen.dart';
 
 import 'app_routes_name.dart';
 

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_procrew/models/email.dart';
-import 'package:flutter_procrew/models/password.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:voice_keep/models/email.dart';
+import 'package:voice_keep/models/password.dart';
 
 import '../../repository/authentication_repository.dart';
 

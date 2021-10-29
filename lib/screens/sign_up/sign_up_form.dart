@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
-import 'package:flutter_procrew/business_logic/signup_cubit/sign_up_cubit.dart';
-import 'package:flutter_procrew/repository/authentication_repository.dart';
-import 'package:flutter_procrew/screens/login/login_form.dart';
-import 'package:flutter_procrew/utils/app_routes_name.dart';
-import 'package:flutter_procrew/widgets/social_buttons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
+import 'package:voice_keep/business_logic/show_password/show_password_cubit.dart';
+import 'package:voice_keep/business_logic/signup_cubit/sign_up_cubit.dart';
+import 'package:voice_keep/repository/authentication_repository.dart';
+import 'package:voice_keep/screens/login/login_form.dart';
+import 'package:voice_keep/utils/app_routes_name.dart';
+import 'package:voice_keep/widgets/social_buttons.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({Key key}) : super(key: key);
@@ -16,7 +16,7 @@ class SignUpForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
-       if (state.status.isSubmissionFailure) {
+        if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(

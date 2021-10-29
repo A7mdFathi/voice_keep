@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/show_password/show_password_cubit.dart';
-import 'package:flutter_procrew/business_logic/signup_cubit/sign_up_cubit.dart';
-import 'package:flutter_procrew/dependencies/dependency_init.dart';
+import 'package:voice_keep/business_logic/show_password/show_password_cubit.dart';
+import 'package:voice_keep/business_logic/signup_cubit/sign_up_cubit.dart';
+import 'package:voice_keep/dependencies/dependency_init.dart';
 
 import 'sign_up_form.dart';
 

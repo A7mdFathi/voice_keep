@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/login_cubit/login_cubit.dart';
-import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:voice_keep/business_logic/login_cubit/login_cubit.dart';
+import 'package:voice_keep/repository/authentication_repository.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   const GoogleLoginButton({Key key, this.login_type}) : super(key: key);

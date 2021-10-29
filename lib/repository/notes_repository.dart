@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_procrew/models/note.dart';
 import 'package:injectable/injectable.dart';
+import 'package:voice_keep/models/note.dart';
 
 @injectable
 class NoteRepository {

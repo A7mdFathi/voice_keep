@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_procrew/repository/authentication_repository.dart';
-import 'package:flutter_procrew/repository/record_repository.dart';
-import 'package:flutter_procrew/repository/storage_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:voice_keep/repository/authentication_repository.dart';
+import 'package:voice_keep/repository/record_repository.dart';
+import 'package:voice_keep/repository/storage_repository.dart';
 
 part 'voice_message_state.dart';
 

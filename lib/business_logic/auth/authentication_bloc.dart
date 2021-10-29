@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_procrew/models/user.dart';
-import 'package:flutter_procrew/repository/authentication_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:voice_keep/models/user.dart';
+import 'package:voice_keep/repository/authentication_repository.dart';
 
 part 'authentication_event.dart';
+
 part 'authentication_state.dart';
 
 @singleton

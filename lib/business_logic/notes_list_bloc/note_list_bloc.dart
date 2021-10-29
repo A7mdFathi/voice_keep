@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_procrew/models/note.dart';
-import 'package:flutter_procrew/repository/notes_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:voice_keep/models/note.dart';
+import 'package:voice_keep/repository/notes_repository.dart';
 
 part 'note_list_event.dart';
+
 part 'note_list_state.dart';
 
 @injectable

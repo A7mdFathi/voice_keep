@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/utils/app_routes.dart';
-import 'package:flutter_procrew/utils/app_routes_name.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:voice_keep/utils/app_routes_name.dart';
 
 import 'business_logic/auth/authentication_bloc.dart';
 import 'dependencies/dependency_init.dart';
+import 'utils/app_routes.dart';
 
 class App extends StatelessWidget {
-   App({
+  App({
     Key key,
   }) : super(key: key);
   AuthenticationBloc _authenticationBloc = getIt<AuthenticationBloc>();
@@ -48,11 +48,13 @@ class _AppViewState extends State<AppView> {
       debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
       title: 'Pro Crew App',
+      initialRoute: AppRoutesName.SPLASH_SCREEN,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           // bloc: _authenticationBloc,
           listener: (context, state) {
             print('state:${state.status}');
+
             switch (state.status) {
               case AppStatus.authenticated:
                 print(' NAVIGATOR IS IN HOME SCREEN');
@@ -64,7 +66,6 @@ class _AppViewState extends State<AppView> {
                 break;
               case AppStatus.unauthenticated:
                 print(' NAVIGATOR IS IN Login SCREEN');
-
                 _navigator.pushNamedAndRemoveUntil<void>(
                   AppRoutesName.LOGIN_SCREEN,
                   (route) => false,

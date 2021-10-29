@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_procrew/business_logic/auth/authentication_bloc.dart';
-import 'package:flutter_procrew/business_logic/send_voice/voice_message_cubit.dart';
-import 'package:flutter_procrew/dependencies/dependency_init.dart';
-import 'package:flutter_procrew/widgets/record_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/src/provider.dart';
+import 'package:voice_keep/business_logic/auth/authentication_bloc.dart';
+import 'package:voice_keep/business_logic/send_voice/voice_message_cubit.dart';
+import 'package:voice_keep/dependencies/dependency_init.dart';
+import 'package:voice_keep/widgets/record_widget.dart';
 
 import '../business_logic/notes_list_bloc/note_list_bloc.dart';
 
