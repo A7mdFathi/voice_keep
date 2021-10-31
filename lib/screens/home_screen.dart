@@ -62,7 +62,13 @@ class HomeScreen extends StatelessWidget {
                             key: Key('Item-$index'),
                             onDismissed: (direction) {
                               context.read<NoteListBloc>()
-                                ..add(NoteDeleteFetched(user.id, note.noteId));
+                                ..add(
+                                  NoteDeleteFetched(
+                                    user.id,
+                                    note.noteId,
+                                    note.noteUrl,
+                                  ),
+                                );
                               print('Note Deleted Fetch');
                             },
                             child: ListTile(

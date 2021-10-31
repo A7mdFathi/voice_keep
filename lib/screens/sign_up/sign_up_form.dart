@@ -4,10 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 import 'package:voice_keep/business_logic/show_password/show_password_cubit.dart';
 import 'package:voice_keep/business_logic/signup_cubit/sign_up_cubit.dart';
-import 'package:voice_keep/repository/authentication_repository.dart';
 import 'package:voice_keep/screens/login/login_form.dart';
 import 'package:voice_keep/utils/app_routes_name.dart';
-import 'package:voice_keep/widgets/social_buttons.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({Key key}) : super(key: key);
@@ -68,8 +66,6 @@ class SignUpForm extends StatelessWidget {
               _ConfirmPasswordInput(),
               SizedBox(height: 18.h),
               _SignUpButton(),
-              SizedBox(height: 18.h),
-              GoogleLoginButton(login_type: LOGIN_TYPE.register),
               SizedBox(height: 18.h),
               Row(
                 mainAxisSize: MainAxisSize.max,

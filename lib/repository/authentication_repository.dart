@@ -56,14 +56,13 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      saveIntoFirestore(
-          credential: credential, login_type: LOGIN_TYPE.register);
+      saveIntoFirestore(credential: credential);
     } on Exception {
       throw SignUpFailure();
     }
   }
 
-  Future<void> logInWithGoogle(LOGIN_TYPE login_type) async {
+  Future<void> logInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
       final googleAuth = await googleUser?.authentication;
@@ -73,9 +72,10 @@ class AuthenticationRepository {
       );
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
-      if (login_type == LOGIN_TYPE.register) {
-        saveIntoFirestore(credential: userCredential, login_type: login_type);
-      }
+
+      saveIntoFirestore(
+        credential: userCredential,
+      );
     } on Exception {
       throw LogInWithGoogleFailure();
     }
@@ -107,10 +107,7 @@ class AuthenticationRepository {
     }
   }
 
-  saveIntoFirestore(
-      {@required firebase_auth.UserCredential credential,
-      @required LOGIN_TYPE login_type}) async {
-    if (login_type == LOGIN_TYPE.login) return;
+  saveIntoFirestore({@required firebase_auth.UserCredential credential}) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(credential.user.uid)

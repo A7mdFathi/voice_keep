@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:voice_keep/models/note.dart';
 
@@ -20,7 +21,8 @@ class NoteRepository {
     return snaps;
   }
 
-  deleteNote(String userId, String noteId) async {
-    return ref.doc(userId).collection('notes').doc(noteId).delete();
+  deleteNote(String userId, String noteId, String noteUrl) async {
+    await ref.doc(userId).collection('notes').doc(noteId).delete();
+    await FirebaseStorage.instance.refFromURL(noteUrl).delete();
   }
 }

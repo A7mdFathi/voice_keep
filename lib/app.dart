@@ -37,18 +37,19 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  AuthenticationBloc _authenticationBloc;
 
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
-    _authenticationBloc = BlocProvider.of(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
-      title: 'Pro Crew App',
+      title: 'Voice Keep App',
       initialRoute: AppRoutesName.SPLASH_SCREEN,
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           // bloc: _authenticationBloc,

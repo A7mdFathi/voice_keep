@@ -8,7 +8,6 @@ import 'package:voice_keep/models/note.dart';
 import 'package:voice_keep/repository/notes_repository.dart';
 
 part 'note_list_event.dart';
-
 part 'note_list_state.dart';
 
 @injectable
@@ -54,7 +53,11 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   Stream<NoteListState> _deleteNote(NoteDeleteFetched event) async* {
     try {
-      noteRepository.deleteNote(event.userId, event.noteId);
+      noteRepository.deleteNote(
+        event.userId,
+        event.noteId,
+        event.noteUrl,
+      );
       yield NoteDeletedSuccess();
     } catch (e) {
       yield NoteDeletedFailure();

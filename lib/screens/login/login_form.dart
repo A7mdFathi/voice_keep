@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 import 'package:voice_keep/business_logic/login_cubit/login_cubit.dart';
 import 'package:voice_keep/business_logic/show_password/show_password_cubit.dart';
-import 'package:voice_keep/repository/authentication_repository.dart';
 import 'package:voice_keep/utils/app_routes_name.dart';
 import 'package:voice_keep/widgets/social_buttons.dart';
 
@@ -71,7 +70,6 @@ class LoginForm extends StatelessWidget {
               _LoginButton(),
               SizedBox(height: 18.h),
               GoogleLoginButton(
-                login_type: LOGIN_TYPE.login,
               ),
               SizedBox(height: 18.h),
               FacebookLoginButton(),

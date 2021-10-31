@@ -16,12 +16,13 @@ class NotesListFetched extends NoteListEvent {
 class NoteDeleteFetched extends NoteListEvent {
   final String userId;
   final String noteId;
+  final String noteUrl;
 
-  NoteDeleteFetched(this.userId, this.noteId);
+  NoteDeleteFetched(this.userId, this.noteId, this.noteUrl);
 
   @override
   // TODO: implement props
-  List<Object> get props => [userId, noteId];
+  List<Object> get props => [userId, noteId, noteUrl];
 }
 
 class NotesListUpdated extends NoteListEvent {
